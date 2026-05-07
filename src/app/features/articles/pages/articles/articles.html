@@ -1,0 +1,42 @@
+<section class="space-y-6">
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <div>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-100">Latest Articles</h1>
+      <p class="text-sm text-slate-300">Read what other developers are writing.</p>
+    </div>
+
+    <a *ngIf="authService.isAuthenticated()" routerLink="/editor" class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-500">Create Article</a>
+  </div>
+
+  <p *ngIf="actionMessage" class="rounded-lg border border-emerald-700 bg-emerald-900/30 px-3 py-2 text-sm text-emerald-300">{{ actionMessage }}</p>
+
+  <div *ngIf="loading" class="rounded-2xl border border-slate-700 bg-slate-800 p-10 text-center shadow-sm">Loading articles...</div>
+
+  <p *ngIf="errorMessage && !loading" class="rounded-lg border border-red-800 bg-red-900/30 p-3 text-red-300">{{ errorMessage }}</p>
+
+  <p *ngIf="!loading && !errorMessage && articles.length === 0" class="rounded-2xl border border-slate-700 bg-slate-800 p-10 text-center shadow-sm">No articles found.</p>
+
+  <div class="grid gap-5" *ngIf="!loading && !errorMessage && articles.length > 0">
+    <article *ngFor="let post of articles" class="overflow-hidden rounded-2xl border border-slate-700 bg-slate-800 shadow-sm">
+      <div class="p-5 sm:p-6">
+        <div class="mb-4 flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <h2 class="text-xl font-semibold text-slate-100">{{ post.title }}</h2>
+            <p class="text-sm text-slate-300">By {{ post.author?.username || 'Unknown' }} - {{ post.createdAt | date: 'mediumDate' }}</p>
+          </div>
+
+          <div class="flex gap-2" *ngIf="canManage(post)">
+            <button type="button" (click)="editArticle(post)" class="rounded-md border border-slate-600 px-3 py-1.5 text-sm font-medium text-slate-200 hover:bg-slate-700">Edit</button>
+            <button type="button" (click)="deleteArticle(post)" class="rounded-md border border-red-700 px-3 py-1.5 text-sm font-medium text-red-300 hover:bg-red-900/30">Delete</button>
+          </div>
+        </div>
+
+        <p class="whitespace-pre-line leading-relaxed text-slate-200">{{ post.content }}</p>
+      </div>
+
+      <div class="grid grid-cols-1 gap-3 border-t border-slate-700 p-4 sm:grid-cols-2" *ngIf="post.images?.length">
+        <img *ngFor="let image of post.images || []" [src]="image" alt="article image" class="h-56 w-full rounded-lg object-cover" />
+      </div>
+    </article>
+  </div>
+</section>

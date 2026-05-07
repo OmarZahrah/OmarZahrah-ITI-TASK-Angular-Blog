@@ -1,0 +1,32 @@
+<header class="sticky top-0 z-30 border-b border-slate-700 bg-slate-800/90 backdrop-blur">
+  <nav class="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+    <a routerLink="/" class="flex items-center gap-2">
+      <span class="inline-block h-8 w-8 rounded-lg bg-indigo-600 text-center text-sm font-bold leading-8 text-white">B</span>
+      <span class="text-lg font-bold text-slate-100">BlogSpace</span>
+    </a>
+
+    <div class="hidden items-center gap-2 md:flex">
+      <a routerLink="/" routerLinkActive="bg-slate-700" [routerLinkActiveOptions]="{ exact: true }" class="rounded-md px-3 py-2 text-sm font-medium text-slate-200">Home</a>
+      <a routerLink="/articles" routerLinkActive="bg-slate-700" class="rounded-md px-3 py-2 text-sm font-medium text-slate-200">Articles</a>
+      <a *ngIf="currentUser$ | async" routerLink="/editor" routerLinkActive="bg-slate-700" class="rounded-md px-3 py-2 text-sm font-medium text-slate-200">Write</a>
+    </div>
+
+    <div class="flex items-center gap-2" *ngIf="currentUser$ | async as user; else guestLinks">
+      <span class="hidden text-sm text-slate-300 sm:inline">{{ user.username }}</span>
+      <button
+        type="button"
+        (click)="logout()"
+        class="rounded-md border border-slate-600 px-3 py-1.5 text-sm font-medium text-slate-200 transition hover:bg-slate-700"
+      >
+        Logout
+      </button>
+    </div>
+
+    <ng-template #guestLinks>
+      <div class="flex items-center gap-2">
+        <a routerLink="/login" class="rounded-md border border-slate-600 px-3 py-1.5 text-sm font-medium text-slate-200">Login</a>
+        <a routerLink="/register" class="rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white shadow-sm">Join</a>
+      </div>
+    </ng-template>
+  </nav>
+</header>

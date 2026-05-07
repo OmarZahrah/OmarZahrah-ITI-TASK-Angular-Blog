@@ -1,0 +1,36 @@
+<section class="mx-auto max-w-2xl rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+  <h1 class="mb-6 text-2xl font-bold">{{ isEditMode ? 'Edit Article' : 'Create Article' }}</h1>
+
+  <div *ngIf="loading" class="rounded-lg bg-slate-100 p-4 text-center dark:bg-slate-700">Loading article...</div>
+
+  <form *ngIf="!loading" [formGroup]="editorForm" (ngSubmit)="onSubmit()" class="space-y-4">
+    <div>
+      <label class="mb-1 block text-sm font-medium">Title</label>
+      <input formControlName="title" type="text" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 dark:border-slate-600 dark:bg-slate-900" />
+      <p class="mt-1 text-sm text-red-500" *ngIf="editorForm.controls.title.touched && editorForm.controls.title.invalid">Title is required (minimum 3 characters).</p>
+    </div>
+
+    <div>
+      <label class="mb-1 block text-sm font-medium">Content</label>
+      <textarea formControlName="content" rows="6" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 dark:border-slate-600 dark:bg-slate-900"></textarea>
+      <p class="mt-1 text-sm text-red-500" *ngIf="editorForm.controls.content.touched && editorForm.controls.content.invalid">Content is required (minimum 3 characters).</p>
+    </div>
+
+    <div *ngIf="!isEditMode">
+      <label class="mb-1 block text-sm font-medium">Images</label>
+      <input type="file" multiple accept="image/*" (change)="onImagesChange($event)" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 dark:border-slate-600 dark:bg-slate-900" />
+      <p class="mt-1 text-xs text-slate-500 dark:text-slate-300">Backend requires at least one image for new article.</p>
+    </div>
+
+    <div>
+      <label class="mb-1 block text-sm font-medium">Group ID (optional)</label>
+      <input formControlName="group" type="text" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 dark:border-slate-600 dark:bg-slate-900" />
+    </div>
+
+    <p class="text-sm text-red-500" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+    <button type="submit" [disabled]="saving" class="rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white disabled:opacity-60">
+      {{ saving ? 'Saving...' : isEditMode ? 'Update Article' : 'Create Article' }}
+    </button>
+  </form>
+</section>
